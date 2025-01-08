@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeospage</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: gray;
+        }
+        .upload-section {
+            margin-bottom: 20px;
+        }
+        .recorded-files {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Zeospage</h1>
+    <div class="upload-section">
+        <input type="file" id="excelFile" accept=".xlsx, .xls">
+        <button id="submitBtn">Submit</button>
+    </div>
+
+    <table id="dataTable">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="recorded-files">
+        <h2>Uploaded Files</h2>
+        <ul id="fileList"></ul>
+    </div>
+
+    <script>
+        const fileList = document.getElementById('fileList');
+        const excelFileInput = document.getElementById('excelFile');
+        const submitBtn = document.getElementById('submitBtn');
+
+        let uploadedFiles = [];
+
+        submitBtn.addEventListener('click', function() {
+            const file = excelFileInput.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                // Simulating file upload
+                const filePath = `updated_files/${file.name}`;
+                uploadedFiles.push(filePath);
+                updateFileList();
+
+                alert(`File "${file.name}" has been uploaded and recorded.`);
+            } else {
+                alert('No file selected.');
+            }
+        });
+
+        function updateFileList() {
+            fileList.innerHTML = '';
+            uploadedFiles.forEach((file, index) => {
+                const li = document.createElement('li');
+
+                const span = document.createElement('span');
+                span.textContent = file;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.style.marginLeft = '10px';
+                deleteBtn.addEventListener('click', function() {
+                    uploadedFiles.splice(index, 1);
+                    updateFileList();
+                });
+
+                li.appendChild(span);
+                li.appendChild(deleteBtn);
+                fileList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
